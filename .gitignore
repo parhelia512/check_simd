@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+check_simd
+
+# For workon
+/release
+/out
+logfile.txt
