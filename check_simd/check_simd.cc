@@ -18,13 +18,11 @@ float __attribute__ ((noinline)) square(float num) {
 }
 
 void checkFPU() {
-  std::cout << square(pi);
-  Log.nl(NL);
+  Log.info("The square of ");
+  std::cout << "                    " << std::to_string(pi) << " is " << square(pi) << ".\n";
+  Log.warn("^ Should have returned 9.8696");
   Log.info("x87 FPU is working!");
-  Log.info("The square of Sdfsdfs");
-  Log.info(std::to_string(pi));
-  Log.info(" is 9.8696");
-  Log.error("Oofles");
+  Log.nl(NL);
 }
 
 void checkAVX() {

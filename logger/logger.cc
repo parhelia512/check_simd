@@ -117,7 +117,6 @@ int main(void) {
 
   Log.nl(NL);
   Log.info("The above is a newline created with Log.nl();");
-  Log.info("this is a warnah");
   Log.error("An error occurred.");
 
   return 0;

@@ -16,7 +16,7 @@ int main(void) {
   Log Log(logFile); 
 
   // Example usage of the logger
-  Log.info("Program started.");
+  Log.info("Standalone Logging Program started.");
   logToConsole();
 
   return 0;

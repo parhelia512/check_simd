@@ -40,6 +40,7 @@ executable("logger") {
   defines = [ "STANDALONE_LOGGER=1" ]
   sources = [
     "logger/logger_main.cc",
+    "logger/logger_main.h"
   ]
   deps = [
     #"//base",
