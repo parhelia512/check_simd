@@ -29,8 +29,8 @@ group("hello_all") {
 # The main application
 executable("check_simd") {
   sources = [
-    "check_simd.cc",
-    "check_simd.h"
+    "check_simd/check_simd.cc",
+    "check_simd/check_simd.h"
   ]
   deps = [ ":logger_src" ]
 }
@@ -39,21 +39,22 @@ executable("check_simd") {
 executable("logger") {
   defines = [ "STANDALONE_LOGGER=1" ]
   sources = [
-    "logger.cc",
-    "logger.h",
-    "base/dcheck.h"
+    "logger/logger_main.cc",
   ]
   deps = [
     #"//base",
-    #":logger_src",
+    ":logger_src",
   ]
 }
 
 # Shared source files between logger and check_simd
 source_set("logger_src") {
+  if (is_standalone_logger) {
+    defines = [ "STANDALONE_LOGGER=1" ]
+  }
   sources = [
-    "logger.cc",
-    "logger.h",
+    "logger/logger.cc",
+    "logger/logger.h",
     "base/dcheck.h"
   ]
   #deps = [ "//base" ]

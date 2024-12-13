@@ -1,5 +1,5 @@
-#ifndef LOGGER_H_
-#define LOGGER_H_
+#ifndef LOGGER_LOGGER_H_
+#define LOGGER_LOGGER_H_
 
 #include <fstream>
 #include <iostream>
@@ -58,4 +58,4 @@ class Log {
   const std::string levelToString(LogLevel level);
 }; // Class Log
 
-#endif // LOGGER_H_
+#endif // LOGGER_LOGGER_H_

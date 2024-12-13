@@ -1,0 +1,9 @@
+
+# Set to true to make a debug build
+is_debug = true
+
+use_avx = true # Needed for check_simd.cc
+is_clang = false # Uses GCC by default
+is_win = false # Project only tested on linux for now
+dcheck_always_on = is_debug # Just like Chromium
+is_standalone_logger = false # Build standalone logging application

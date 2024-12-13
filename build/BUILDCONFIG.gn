@@ -24,10 +24,14 @@ if (current_os == "") {
 }
 
 declare_args() {
-  # Build in debug mode?
+  # Wether to make a debug build.
+  # In debug mode, all assertions are turned on, all compiler
+  # optimization is turned off, and all symbols are included.
+  # This makes a large, slow binary that should never be distributed
+  # to end users. Set to false to make a release build. 
   is_debug = true
 
-  # Build standalone logger application?
+  # Build the standalone logger application?
   is_standalone_logger = false
 }
 

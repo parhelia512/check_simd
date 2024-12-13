@@ -1,12 +1,14 @@
 declare_args() {
-  # Build with AVX instructions?
+  # Whether to build with AVX instructions.
+  # See https://en.wikipedia.org/wiki/Advanced_Vector_Extensions
   use_avx = true
 
-  # Whether to keep DCHECK on in a release build
+  # Whether to keep DCHECK on, even in a release build.
+  # See dcheck.h
   dcheck_always_on = is_debug
 
-  # Whether to use LLVM/Clang instead of platform native compiler
-  # (GCC on Linux, MSVC on Windows).
+  # Whether to use LLVM/Clang instead of the platform native compiler
+  # (such as GCC on Linux, MSVC on Windows, etc.).
   is_clang = false
 }
 

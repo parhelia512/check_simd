@@ -1,0 +1,155 @@
+current_cpu:
+    Default = host_cpu
+    The processor architecture of the current toolchain.
+
+    The build configuration usually sets this value based on the value of
+    "host_cpu" (see "gn help host_cpu") and then threads this through the
+    toolchain definitions to ensure that it always reflects the appropriate
+    value.
+
+    This value is not used internally by GN for any purpose. It is set to the
+    empty string ("") by default but is declared so that it can be overridden on
+    the command line if so desired.
+    See "target_cpu" for a list of common values returned.
+
+current_os:
+    Default = host_os
+    The operating system of the current toolchain.
+
+    The build configuration usually sets this value based on the value of
+    "target_os" (see "gn help target_os"), and then threads this through the
+    toolchain definitions to ensure that it always reflects the appropriate
+    value.
+
+    This value is not used internally by GN for any purpose. It is set to the
+    empty string ("") by default but is declared so that it can be overridden on
+    the command line if so desired.
+    See "target_os" for a list of common values returned.
+
+dcheck_always_on:
+    Default = true
+    Whether to keep DCHECK on, even in a release build.
+    See dcheck.h
+
+host_cpu:
+    The processor architecture that GN is running on.
+
+    This is value is exposed so that cross-compile toolchains can access the host
+    architecture when needed.
+
+    The value should generally be considered read-only, but it can be overridden
+    in order to handle unusual cases where there might be multiple plausible
+    values for the host architecture (e.g., if you can do either 32-bit or 64-bit
+    builds). The value is not used internally by GN for any purpose.
+
+    Some possible values:
+      - "x64"
+      - "x86"
+
+host_os:
+    [string] The operating system that GN is running on.
+
+    This value is exposed so that cross-compiles can access the host build
+    system's settings.
+
+    This value should generally be treated as read-only. It, however, is not used
+    internally by GN for any purpose.
+
+    Some possible values:
+      - "linux"
+      - "mac"
+      - "win"
+
+is_clang:
+    Default = false
+    Whether to use LLVM/Clang instead of the platform native compiler
+    (such as GCC on Linux, MSVC on Windows, etc.).
+
+is_debug:
+    Default = true
+    Wether to make a debug build.
+
+    In debug mode, all assertions are turned on, all compiler
+    optimization is turned off, and all symbols are included.
+    This makes a large, slow binary that should never be distributed
+    to end users. Set to false to make a release build. 
+
+is_standalone_logger:
+    Default = false
+    Build the standalone logger application?
+
+target_cpu:
+    The desired cpu architecture for the build.
+
+    This value should be used to indicate the desired architecture for the
+    primary objects of the build. It will match the cpu architecture of the
+    default toolchain, but not necessarily the current toolchain.
+
+    In many cases, this is the same as "host_cpu", but in the case of
+    cross-compiles, this can be set to something different. This value is
+    different from "current_cpu" in that it does not change based on the current
+    toolchain. When writing rules, "current_cpu" should be used rather than
+    "target_cpu" most of the time.
+
+    This value is not used internally by GN for any purpose, so it may be set to
+    whatever value is needed for the build. GN defaults this value to the empty
+    string ("") and the configuration files should set it to an appropriate value
+    (e.g., setting it to the value of "host_cpu") if it is not overridden on the
+    command line or in the args.gn file.
+
+    Possible values:
+      - "x86"
+      - "x64"
+      - "arm"
+      - "arm64"
+      - "mipsel"
+      - "mips64el"
+      - "s390x"
+      - "ppc64"
+      - "riscv32"
+      - "riscv64"
+      - "e2k"
+      - "loong64"
+
+target_os:
+    The desired operating system for the build.
+
+    This value should be used to indicate the desired operating system for the
+    primary object(s) of the build. It will match the OS of the default
+    toolchain.
+
+    In many cases, this is the same as "host_os", but in the case of
+    cross-compiles, it may be different. This variable differs from "current_os"
+    in that it can be referenced from inside any toolchain and will always return
+    the initial value.
+
+    This should be set to the most specific value possible. So, "android" or
+    "chromeos" should be used instead of "linux" where applicable, even though
+    Android and ChromeOS are both Linux variants. This can mean that one needs to
+    write:
+
+      if (target_os == "android" || target_os == "linux") {
+          # ...
+      }
+
+    and so forth.
+
+    This value is not used internally by GN for any purpose, so it may be set to
+    whatever value is needed for the build. GN defaults this value to the empty
+    string ("") and the configuration files should set it to an appropriate value
+    (e.g., setting it to the value of "host_os") if it is not set via the command
+    line or in the args.gn file.
+
+    Possible values:
+      - "android"
+      - "chromeos"
+      - "ios"
+      - "linux"
+      - "nacl"
+      - "mac"
+      - "win"
+
+use_avx:
+    Default = true
+    Whether to build with AVX instructions.
+    See https://en.wikipedia.org/wiki/Advanced_Vector_Extensions

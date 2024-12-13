@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #include "check_simd.h"
-#include "logger.h"
+#include "../logger/logger.h"
 
 Log Log("logfile.txt"); 
 
@@ -24,7 +24,7 @@ void checkFPU() {
   Log.info("The square of Sdfsdfs");
   Log.info(std::to_string(pi));
   Log.info(" is 9.8696");
-  Log.error("FUCK NIGGAS");
+  Log.error("Oofles");
 }
 
 void checkAVX() {
