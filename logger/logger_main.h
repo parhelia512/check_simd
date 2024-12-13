@@ -7,4 +7,6 @@ std::string concatStream(input);
 
 void logToConsole();
 
+int main(void);
+
 #endif // LOGGER_LOGGER_MAIN_H_

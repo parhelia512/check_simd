@@ -2,8 +2,9 @@ static_library("base") {
   sources = [
     "check.h",
     "check_op.h",
-    "dcheck.h",
     "compiler_specific.h",
+    "dcheck.h",
+    "export.h",
     "immediate_crash.h",
     "logging.cc",
     "logging.h",

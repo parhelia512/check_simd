@@ -253,6 +253,14 @@ config("lean_and_mean") {
   defines = [ "WIN32_LEAN_AND_MEAN" ]
 }
 
+# For kill code in logger.h
+config("no_div_by_zero") {
+  cflags = [ "-Wno-div-by-zero" ]
+  if (is_clang) {
+    ldflags = [ "-Wl,-Wno-div-by-zero" ]
+  }
+}
+
 # Default libraries ------------------------------------------------------------
 
 # This config defines the default libraries applied to all targets.

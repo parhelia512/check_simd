@@ -3,7 +3,7 @@
 #include "check_simd.h"
 #include "../logger/logger.h"
 
-Log Log("logfile.txt"); 
+Log Log("check_simd_logfile.txt"); 
 
 #ifdef _WIN32
 #define cpuid(info, x)    __cpuidex(info, x, 0)

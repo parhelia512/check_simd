@@ -1,15 +1,16 @@
 # Main BUILD.gn that contains all the targets
 
-# Build everything
+# Build everything except test stuff
 group("all") {
+  testonly = false
   deps = [
-    ":hello_all",
     ":check_simd",
-    ":logger"
+    ":logger",
+    ":loglib",
   ]
 }
 
-# Sample Hello World applications
+# check_simd and logger app
 group("check_simd_all") {
   deps = [
     ":check_simd",
@@ -17,12 +18,13 @@ group("check_simd_all") {
   ]
 }
 
-# Sample Hello World applications
+# Test Hello World applications
 group("hello_all") {
+  testonly = true
   deps = [
-    ":hello",
-    ":hello_shared",
-    ":hello_static"
+    "//test:hello",
+    "//test:hello_shared",
+    "//test:hello_static"
   ]
 }
 
@@ -32,7 +34,8 @@ executable("check_simd") {
     "check_simd/check_simd.cc",
     "check_simd/check_simd.h"
   ]
-  deps = [ ":logger_src" ]
+  configs += [ "//build/config:no_div_by_zero" ]
+  deps = [ ":loglib" ]
 }
 
 # Standalone logger target
@@ -42,49 +45,33 @@ executable("logger") {
     "logger/logger_main.cc",
     "logger/logger_main.h"
   ]
+  configs += [ "//build/config:no_div_by_zero" ]
   deps = [
-    #"//base",
-    ":logger_src",
+    "//base",
+    ":loglib",
   ]
 }
 
 # Shared source files between logger and check_simd
-source_set("logger_src") {
+shared_library("loglib") {
   if (is_standalone_logger) {
     defines = [ "STANDALONE_LOGGER=1" ]
   }
   sources = [
+    "logger/libexport.h",
     "logger/logger.cc",
     "logger/logger.h",
     "base/dcheck.h"
   ]
-  #deps = [ "//base" ]
-}
-
-# Hello World sample
-executable("hello") {
-  sources = [ "hello.cc" ]
-
-  deps = [
-    ":hello_shared",
-    ":hello_static"
-  ]
-}
-
-# Static library sample
-shared_library("hello_shared") {
-  defines = [ "HELLO_SHARED_IMPLEMENTATION" ]
-
-  sources = [
-    "hello_shared.cc",
-    "hello_shared.h"
-  ]
-}
-
-# Shared libary sample
-static_library("hello_static") {
-  sources = [
-    "hello_static.cc",
-    "hello_static.h"
-  ]
+  configs += [ "//build/config:no_div_by_zero" ]
+  deps = [ "//base" ]
+  if (is_win) {
+    output_name = "liblog.dll"
+  } else if (is_linux) {
+    output_name = "liblog"
+  } else if (is_mac) {
+    outputs = "liblog.dylib"
+  } else {
+    output_name = "liblog"
+  }
 }

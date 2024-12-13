@@ -14,11 +14,6 @@ Log::Log(const std::string& filename) {
 // Destructor: Closes the log file
 Log::~Log() { logFile.close(); }
 
-// Get current timestamp
-time_t now = time(0);
-tm* timeinfo = localtime(&now);
-char timestamp[29];
-
 // Opens the log file in append mode
 void Log::init(const std::string& filename) {
   logFile.open(filename, std::ios::app);
@@ -27,12 +22,18 @@ void Log::init(const std::string& filename) {
   }
 }
 
+void Log::getTime() {
+  // Get current timestamp
+  time_t now = time(0);
+  tm* timeinfo = localtime(&now);
+  strftime(timestamp, sizeof(timestamp),
+          "%Y-%m-%d %H:%M:%S", timeinfo);
+}
+
 // Log messages with a given log level
 void Log::info(const std::string& info_message) {
-  strftime(timestamp, sizeof(timestamp),
-           "%Y-%m-%d %H:%M:%S", timeinfo);
-
   // Output to console
+  getTime();
   std::ostringstream infoEntry;
   infoEntry << "[" << timestamp << "] "
            << levelToString(INFO) << ": " << info_message
@@ -43,9 +44,7 @@ void Log::info(const std::string& info_message) {
 }
 
 void Log::warn(const std::string& warn_message) {
-  strftime(timestamp, sizeof(timestamp),
-           "%Y-%m-%d %H:%M:%S", timeinfo);
-
+  getTime();
   std::ostringstream warnEntry;
   warnEntry << "[" << timestamp << "] "
            << levelToString(WARN) << ": " << warn_message
@@ -56,9 +55,7 @@ void Log::warn(const std::string& warn_message) {
 }
 
 void Log::error(const std::string& error_message) {
-  strftime(timestamp, sizeof(timestamp),
-           "%Y-%m-%d %H:%M:%S", timeinfo);
-
+  getTime();
   std::ostringstream errEntry;
   errEntry << "[" << timestamp << "] "
            << levelToString(ERROR) << ": " << error_message

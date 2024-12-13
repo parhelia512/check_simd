@@ -1,0 +1,12 @@
+[2024-12-13 07:16:24] INFO: The square of 
+[2024-12-13 07:16:24] WARNING: ^ Should have returned 9.8696
+[2024-12-13 07:16:24] INFO: x87 FPU is working!
+
+[2024-12-13 07:16:24] INFO: AVX is supported!
+
+[2024-12-13 07:19:10] INFO: The square of 
+[2024-12-13 07:19:10] WARNING: ^ Should have returned 9.8696
+[2024-12-13 07:19:10] INFO: x87 FPU is working!
+
+[2024-12-13 07:19:10] INFO: AVX is supported!
+
