@@ -1,0 +1,19 @@
+static_library("base") {
+  sources = [
+    "check.h",
+    "check_op.h",
+    "dcheck.h",
+    "compiler_specific.h",
+    "immediate_crash.h",
+    "logging.cc",
+    "logging.h",
+    "notreached.h",
+    "rand_util.cc",
+    "rand_util.h",
+  ]
+  if (is_win) {
+    libs = [ "advapi32.lib" ]
+  }
+
+  public_deps = [ "../build" ]
+}

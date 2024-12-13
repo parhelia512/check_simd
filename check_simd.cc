@@ -1,19 +1,30 @@
-#include "check_simd.h"
-
 #include <stdio.h>
+
+#include "check_simd.h"
 #include "logger.h"
 
 Log Log("logfile.txt"); 
 
-// Type your code here, or load an example.
-float __attribute__ ((noinline)) square(float num1, float num2) {
-    return num1 * num2;
+#ifdef _WIN32
+#define cpuid(info, x)    __cpuidex(info, x, 0)
+#else
+void cpuid(int info[4], int InfoType){
+    __cpuid_count(InfoType, 0, info[0], info[1], info[2], info[3]);
+}
+#endif
+
+float __attribute__ ((noinline)) square(float num) {
+    return num * num;
 }
 
 void checkFPU() {
-  square(tnum, pi);
+  std::cout << square(pi);
+  Log.nl(NL);
   Log.info("x87 FPU is working!");
-  std::wcout << tnum;
+  Log.info("The square of Sdfsdfs");
+  Log.info(std::to_string(pi));
+  Log.info(" is 9.8696");
+  Log.error("FUCK NIGGAS");
 }
 
 void checkAVX() {

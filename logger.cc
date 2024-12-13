@@ -1,10 +1,13 @@
-#include "logger.h"
-
 #include <ctime>
+
+#include "base/dcheck.h"
+#include "logger.h"
 
 // Constructor: 
 Log::Log(const std::string& filename) {
-  //DCHECK(filename);
+#ifdef DCHECK_IS_ON
+  DCHECK(filename);
+#endif
   init(filename);
 }
 
@@ -65,7 +68,7 @@ void Log::error(const std::string& error_message) {
   filelog(logOutput);
   logFile.close();
   std::cerr << "FATAL: Terminating with error code: \n";
-  NOTREACHED();
+  NOTREACHABLE();
 }
 
 void Log::nl(LogLevel level) {
@@ -101,7 +104,8 @@ const std::string Log::levelToString(LogLevel level) {
   }
 }
 
-/* int main(void) {
+#ifdef STANDALONE_LOGGER
+int main(void) {
   // Name/Location of the logfile
   const std::string logFile = "logfile.txt";
   // Create logger instance
@@ -117,4 +121,5 @@ const std::string Log::levelToString(LogLevel level) {
   Log.error("An error occurred.");
 
   return 0;
-} */
+}
+#endif

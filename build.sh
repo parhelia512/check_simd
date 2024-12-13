@@ -21,6 +21,7 @@ displayHelp () {
 	printf "${bold}${GRE}Script to build check_simd for POSIX OSes.${c0}\n" &&
 	printf "${bold}${YEL}  Use the --release flag to make a release build.${c0}\n" &&
 	printf "${bold}${YEL}  Use the --debug flag to make a debugging build.${c0}\n" &&
+	printf "${bold}${YEL}  Use the --clean flag to clean the out directory.${c0}\n" &&
 	printf "${bold}${YEL}  --help or -h shows this help.${c0}\n" &&
 	printf "\n"
 }
@@ -31,11 +32,14 @@ case $1 in
 	-h) displayHelp; exit 0;;
 esac
 
-COMMON_BUILD_FLAGS="-mavx -Wno-div-by-zero"
+export COMMON_DEBUG_CFLAGS="-DDCHECK_IS_ON -DDEBUG -std=c++14 -w -g2 -Og -mavx -Wno-div-by-zero" &&
+export COMMON_RELEASE_CFLAGS="-DNDEBUG -std=c++14 -s -g0 -O3 -mavx -Wno-div-by-zero" &&
+export COMMON_DEBUG_LDLAGS="-std=c++14 -mavx -Wl,-Wno-div-by-zero" &&
+export COMMON_RELESE_LDLAGS="-std=c++14 -mavx -Wl,-Wno-div-by-zero"
 
 buildRelease () {
   mkdir -p ./out &&
-  g++ $COMMON_BUILD_FLAGS -s -g0 -O3 logger.cc check_simd.cc -o ./out/check_simd
+  g++ $COMMON_RELEASE_CFLAGS logger.cc check_simd.cc -o ./out/check_simd
 }
 case $1 in
 	--release) buildRelease; exit 0;;
@@ -43,8 +47,18 @@ esac
 
 buildDebug () {
   mkdir -p ./out &&
-  g++ $COMMON_BUILD_FLAGS -w -g2 -Og logger.cc check_simd.cc -o ./out/check_simd.debug
+  gcc $COMMON_DEBUG_CFLAGS -DSTANDALONE logger.cc -o ./out/logger.obj
+  #g++ $COMMON_DEBUG_CFLAGS logger.cc check_simd.cc -o ./out/check_simd.obj
+  #ldd -v $COMMON_DEBUG_CFLAGS logger.cc check_simd.cc -o ./out/check_simd.debug
+  #ldd $COMMON_DEBUG_LDFLAGS ./out/logger.obj ./out/check_simd.obj -o ./out/check_simd.debug
 }
 case $1 in
 	--debug) buildDebug; exit 0;;
+esac
+
+cleanBuild () {
+  rm -r -v ./out/*
+}
+case $1 in
+	--clean) cleanBuild; exit 0;;
 esac

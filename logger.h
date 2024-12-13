@@ -16,7 +16,7 @@
 
 // Kill immediately
 inline __attribute__((__always_inline__)) int KILL() {
-  return 1 / 0;
+  __builtin_unreachable();
 }
 
 // Enum to represent log levels

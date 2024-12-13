@@ -1,0 +1,88 @@
+# Main BUILD.gn that contains all the targets
+
+# Build everything
+group("all") {
+  deps = [
+    ":hello_all",
+    ":check_simd",
+    ":logger"
+  ]
+}
+
+# Sample Hello World applications
+group("check_simd_all") {
+  deps = [
+    ":check_simd",
+    ":logger"
+  ]
+}
+
+# Sample Hello World applications
+group("hello_all") {
+  deps = [
+    ":hello",
+    ":hello_shared",
+    ":hello_static"
+  ]
+}
+
+# The main application
+executable("check_simd") {
+  sources = [
+    "check_simd.cc",
+    "check_simd.h"
+  ]
+  deps = [ ":logger_src" ]
+}
+
+# Standalone logger target
+executable("logger") {
+  defines = [ "STANDALONE_LOGGER=1" ]
+  sources = [
+    "logger.cc",
+    "logger.h",
+    "base/dcheck.h"
+  ]
+  deps = [
+    #"//base",
+    #":logger_src",
+  ]
+}
+
+# Shared source files between logger and check_simd
+source_set("logger_src") {
+  sources = [
+    "logger.cc",
+    "logger.h",
+    "base/dcheck.h"
+  ]
+  #deps = [ "//base" ]
+}
+
+# Hello World sample
+executable("hello") {
+  sources = [ "hello.cc" ]
+
+  deps = [
+    ":hello_shared",
+    ":hello_static"
+  ]
+}
+
+# Static library sample
+shared_library("hello_shared") {
+  defines = [ "HELLO_SHARED_IMPLEMENTATION" ]
+
+  sources = [
+    "hello_shared.cc",
+    "hello_shared.h"
+  ]
+}
+
+# Shared libary sample
+static_library("hello_static") {
+  sources = [
+    "hello_static.cc",
+    "hello_static.h"
+  ]
+}

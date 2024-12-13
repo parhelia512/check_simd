@@ -8,7 +8,7 @@ constexpr float tnum = 1.007f;
 constexpr float pi = 3.1415926f;
 
 // Test x87 FPU without inlining
-float __attribute__ ((noinline)) square(float num1, float num2);
+float __attribute__ ((noinline)) square(float num);
 void checkFPU();
 
 // Check all the SIMD levels
@@ -28,6 +28,8 @@ void checkFMA4();
 void checkAVX2();
 void checkAVX512();
 void checkVMX();
+
+int main(void);
 
 /*===---- cpuid.h - X86 cpu model detection --------------------------------===
  *
