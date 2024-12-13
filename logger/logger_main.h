@@ -5,6 +5,6 @@
 
 std::string concatStream(input);
 
-void logToConsole(concatStream());
+void logToConsole();
 
 #endif // LOGGER_LOGGER_MAIN_H_
