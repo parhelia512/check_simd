@@ -1,3 +1,5 @@
+import("//build/build_args.gni")
+
 # Include directories
 config("includes") {
   include_dirs = [
@@ -42,23 +44,24 @@ config("shared_library_config") {
 
 # Debug/Release ----------------------------------------------------------------
 config("debug") {
-  defines = [
-    "DEBUG",
-    "_DEBUG",
-    "DYNAMIC_ANNOTATIONS_ENABLED=1",
-  ]
-
-  configs = [
-    "//build/config:compiler",
-    "//build/config:debug",
-  ]
+  configs = [ "//build/config:compiler", ]
+  if (is_debug) {
+    defines = [
+      "DEBUG",
+      "_DEBUG",
+      "DYNAMIC_ANNOTATIONS_ENABLED=1",
+    ]
+    configs += [ "//build/config:debug", ]
+  }
 }
 
 config("release") {
-  defines = [
-    "NDEBUG",
-    "_NDEBUG"
-  ]
-
-  configs = [ "//build/config:compiler" ]
+  configs = [ "//build/config:compiler", ]
+  if (!is_debug) {
+    defines = [
+      "NDEBUG",
+      "_NDEBUG"
+    ]
+    configs += [ "//build/config:release", ]
+  }
 }

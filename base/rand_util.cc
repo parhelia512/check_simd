@@ -12,13 +12,14 @@
 #include <limits>
 
 #include "base/check_op.h"
-#include "base/files/file_util.h"
+#include "base/file_util.h"
 #include "build/build_config.h"
 
-#if BUILDFLAG(IS_FUCHSIA)
-#include <zircon/syscalls.h>
-#include "base/fuchsia/fuchsia_logging.h"
-#elif BUILDFLAG(IS_POSIX)
+//#if BUILDFLAG(IS_FUCHSIA)
+//#include <zircon/syscalls.h>
+//#include "base/fuchsia/fuchsia_logging.h"
+//#elif BUILDFLAG(IS_POSIX)
+#if BUILDFLAG(IS_POSIX)
 #include "base/posix/eintr_wrapper.h"
 #elif BUILDFLAG(IS_WIN)
 #include <windows.h>
@@ -57,6 +58,19 @@ uint64_t RandUint64() {
   uint64_t number;
   RandBytes(&number, sizeof(number));
   return number;
+}
+
+const long double pi() {
+    long double pi = 0.0;
+    int sign = 1;
+    int n = 10; // Number of terms for approximation
+
+    for (int i = 1; i <= n; i += 2) {
+        pi += sign * 4.0 / i;
+        sign *= -1;
+    }
+
+    return pi;
 }
 
 int RandInt(int min, int max) {

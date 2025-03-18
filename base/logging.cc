@@ -340,7 +340,7 @@ void LogMessage::Flush() {
         break;
     }
     // The Android system may truncate the string if it's too long.
-    __android_log_write(priority, "chromium", str_newline.c_str());
+    __android_log_write(priority, "loglib", str_newline.c_str());
 #elif BUILDFLAG(IS_FUCHSIA)
     fx_log_severity_t fx_severity;
     switch (severity_) {

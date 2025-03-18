@@ -74,9 +74,9 @@ is_debug:
     This makes a large, slow binary that should never be distributed
     to end users. Set to false to make a release build. 
 
-is_standalone_logger:
+is_static_logger:
     Default = false
-    Build the standalone logger application?
+    Build without the shared liblog library. Good for public builds
 
 target_cpu:
     The desired cpu architecture for the build.

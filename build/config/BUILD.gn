@@ -1,3 +1,5 @@
+import("//build/build_args.gni")
+
 declare_args() {
   # Whether to build with AVX instructions.
   # See https://en.wikipedia.org/wiki/Advanced_Vector_Extensions
@@ -6,33 +8,60 @@ declare_args() {
   # Whether to keep DCHECK on, even in a release build.
   # See dcheck.h
   dcheck_always_on = is_debug
-
-  # Whether to use LLVM/Clang instead of the platform native compiler
-  # (such as GCC on Linux, MSVC on Windows, etc.).
-  is_clang = false
 }
 
+# Debug/release-related defines.
 config("debug") {
-  defines = [ "SYMBOL_LEVEL=2" ]
+  # Full symbols and assertions
+  defines = [
+    "SYMBOL_LEVEL=2",
+    "DCHECK_IS_ON=1"
+  ]
+}
+config("release") {
+  # No symbols or assertions
+  defines = [
+    "SYMBOL_LEVEL=0",
+    "RELEASE=1",
+  ]
 }
 
+# Compiler flags ---------------------------------------------------------------
 # Set up our baseline compiler flags, and optimization flags
 config("compiler") {
   # Compiler flags
-  cflags = []
+  # Use 2017 syntax for //base
+  # and because >= GCC 8, >= Clang 5, and
+  # >= MSVC 19.15 (MSVS 2017 15.8 update) supports it.
+  # Compilation/development can thus be done on Windows 7 SP1+
+  cflags = [ "-std=c++17" ]
+  # C only flags
+  cflags_c = []
+  # C++ only flags
+  cflags_cc = cflags
   # Linker flags
   ldflags = []
   # Assembler flags
   asmflags = []
+  # Archiver flags
+  arflags = []
+  # Configs to import from other BUILD.gns
   configs = []
+  # Compiler DEFINEs
   defines = []
 
 
   if (dcheck_always_on) {
-    defines += [ "DCHECK_ALWAYS_ON=1" ]
+    defines += [ "DCHECK_IS_ON=1" ]
   }
-  if (is_standalone_logger) {
-    defines += [ "STANDALONE_LOGGER=1" ]
+  if (is_static_logger) {
+    # Build logger app and check_simd without shared liblog library
+    defines += [ "STATIC_LOGGER=1" ]
+  }
+
+  if (is_posix) {
+    # Use standard C++ stuff
+    cflags += [ "-lstdc++", ]
   }
 
   if (is_posix && !is_mac) {
@@ -41,6 +70,7 @@ config("compiler") {
         "-fPIC",
         "-pthread",
       ]
+      ldflags += [ "-fPIC", ]
     }
     if (current_cpu == "x64" || current_cpu == "ppc64") {
       cflags += [ "-m64", ]
@@ -67,6 +97,7 @@ config("compiler") {
       cflags += [
         "-g2", # Include full debugging symbols
         "-Og", # Optimize lightly, excluding debug stuff
+        "-w", # Warnings
         "-Werror", # Warnings are errors
       ]
       ldflags += [
@@ -77,6 +108,7 @@ config("compiler") {
       cflags += [
         "-g0", # Disable debugging symbols
         "-O3", # Enable full optimization
+        "-s", # Enable stripping
         "-Wno-error", # Warnings aren't errors
       ]
       ldflags += [
@@ -262,7 +294,6 @@ config("no_div_by_zero") {
 }
 
 # Default libraries ------------------------------------------------------------
-
 # This config defines the default libraries applied to all targets.
 config("default_libs") {
   if (is_win) {
@@ -289,8 +320,7 @@ config("default_libs") {
       "rt",
     ]
   } else {
-    # NOTREACHED This shouldn't be reached
-    print("No default libs applied during compilation")
-    libs = []
+    # NOTREACHED This should never be reached
+    print("NOTREACHED: No default libs applied during compilation!")
   }
 }

@@ -13,6 +13,8 @@ namespace base {
 
 uint64_t RandUint64();
 
+static long double const pi();
+
 int RandInt(int min, int max);
 
 uint64_t RandGenerator(uint64_t range);

@@ -1,14 +1,15 @@
 #include <stdio.h>
 
 #include "check_simd.h"
-#include "../logger/logger.h"
+#include "cpuid.h"
+#include "logger/logger.h"
 
 Log Log("check_simd_logfile.txt"); 
 
 #ifdef _WIN32
-#define cpuid(info, x)    __cpuidex(info, x, 0)
+#define cpuid(info, x) __cpuidex(info, x, 0)
 #else
-void cpuid(int info[4], int InfoType){
+void cpuid(int info[4], int InfoType) {
     __cpuid_count(InfoType, 0, info[0], info[1], info[2], info[3]);
 }
 #endif
@@ -17,12 +18,15 @@ float __attribute__ ((noinline)) square(float num) {
     return num * num;
 }
 
+void testWChar() {
+}
+
 void checkFPU() {
-  Log.info("The square of ");
-  std::cout << "                    " << std::to_string(pi) << " is " << square(pi) << ".\n";
-  Log.warn("^ Should have returned 9.8696");
+  Log.info("The square of " + std::to_wstring(pi()) + " is ");
+  std::cout << "                      "  << square(pi()) << "\n";
+  Log.warn("^ Should have returned 9.869603...");
   Log.info("x87 FPU is working!");
-  Log.nl(NL);
+  std::cout << "Pi: " << pi() << std::endl;  
 }
 
 void checkAVX() {
@@ -52,5 +56,6 @@ void checkAVX() {
 int main(void) {
   checkFPU();
   checkAVX();
+  testWChar();
   return 0;
 }

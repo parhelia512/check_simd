@@ -1,7 +1,7 @@
 #ifndef LOGGER_EXPORT_H_
 #define LOGGER_EXPORT_H_
 
-#if !defined(STANDALONE_LOGGER)
+#if !defined(STATIC_LOGGER)
 
 #if defined(WIN32)
  #define EXPORT __declspec(dllexport)
@@ -21,6 +21,6 @@
  #define EXPORT_PRIVATE
 #endif  // defined(WIN32)
 
-#endif  // !defined(STANDALONE_LOGGER)
+#endif  // !defined(STATIC_LOGGER)
 
 #endif // LOGGER_EXPORT_H_

@@ -2,6 +2,9 @@
 
 Simple, cross platform command line SIMD checker with logger, written in C++.
 
+It uses libhighway for dyanmic dispatch:
+https://github.com/google/highway/blob/master/g3doc/quick_reference.md
+
 This also has a handy little logger that could be used as a library.
 
 Currently simply a command line program for Linux and Windows, that checks

@@ -38,10 +38,10 @@ namespace base {
 #elif defined(ARCH_CPU_ARM64)
   asm("brk #0; hlt #0;");
 #else
-  __builtin_trap();
+  asm("int3; ud2;");
 #endif
 #if defined(__clang__) || defined(COMPILER_GCC)
-  __builtin_unreachable();
+  asm("int3; ud2;");
 #endif  // defined(__clang__) || defined(COMPILER_GCC)
 }
 

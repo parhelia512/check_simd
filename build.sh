@@ -32,25 +32,29 @@ case $1 in
 	-h) displayHelp; exit 0;;
 esac
 
-export COMMON_DEBUG_CFLAGS="-DDCHECK_IS_ON -DDEBUG -std=c++14 -w -g2 -Og -mavx -Wno-div-by-zero" &&
-export COMMON_RELEASE_CFLAGS="-DNDEBUG -std=c++14 -s -g0 -O3 -mavx -Wno-div-by-zero" &&
-export COMMON_DEBUG_LDLAGS="-std=c++14 -mavx -Wl,-Wno-div-by-zero" &&
-export COMMON_RELESE_LDLAGS="-std=c++14 -mavx -Wl,-Wno-div-by-zero"
+export PATH=./buildtools:$PATH
 
 buildRelease () {
+  printf "${bold}${GRE}Building all targets...${bold}${CYA}\n"
   mkdir -p ./out &&
-  g++ $COMMON_RELEASE_CFLAGS logger.cc check_simd.cc -o ./out/check_simd
+  gn gen out/ &&
+  ninja -C out/ all &&
+  printf "\n${bold}${GRE}Done!\n"
 }
 case $1 in
 	--release) buildRelease; exit 0;;
 esac
 
 buildDebug () {
+  printf "${bold}${GRE}Building a debug build...${bold}${CYA}\n"
   mkdir -p ./out &&
-  gcc $COMMON_DEBUG_CFLAGS -DSTANDALONE logger.cc -o ./out/logger.obj
+  gn gen out/ &&
+  #gcc $COMMON_DEBUG_CFLAGS -DSTANDALONE logger.cc -o ./out/logger.obj &&
   #g++ $COMMON_DEBUG_CFLAGS logger.cc check_simd.cc -o ./out/check_simd.obj
   #ldd -v $COMMON_DEBUG_CFLAGS logger.cc check_simd.cc -o ./out/check_simd.debug
   #ldd $COMMON_DEBUG_LDFLAGS ./out/logger.obj ./out/check_simd.obj -o ./out/check_simd.debug
+  ninja -v -C out/ all hello_all &&
+  printf "\n${bold}${GRE}Done!\n"
 }
 case $1 in
 	--debug) buildDebug; exit 0;;
@@ -62,3 +66,7 @@ cleanBuild () {
 case $1 in
 	--clean) cleanBuild; exit 0;;
 esac
+
+displayHelp
+
+exit 0

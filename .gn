@@ -6,6 +6,6 @@
 buildconfig = "//build/BUILDCONFIG.gn"
 
 default_args = {
-  # Build the standalone logger application?
-  is_standalone_logger = false
+  # Build everything, in non debug mode, and package it.
+  is_release_build = false
 }

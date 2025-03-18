@@ -1,12 +1,18 @@
 #include <ctime>
 
-#include "../base/dcheck.h"
+#include "base/dcheck.h"
+#include "base/logging.h"
 #include "logger.h"
 
 // Constructor: 
 Log::Log(const std::string& filename) {
 #ifdef DCHECK_IS_ON
-  DCHECK(filename);
+  DCHECK(filename == "logfile.txt" ||
+         filename == "log.txt" ||
+         filename == "check_simd.txt" ||
+         filename == "check_simd_logfile.txt" ||
+         filename == "logger.txt"         
+        );
 #endif
   init(filename);
 }
@@ -33,37 +39,43 @@ void Log::getTime() {
 // Log messages with a given log level
 void Log::info(const std::string& info_message) {
   // Output to console
-  getTime();
-  std::ostringstream infoEntry;
-  infoEntry << "[" << timestamp << "] "
-           << levelToString(INFO) << ": " << info_message
-           << std::endl;
-  logOutput = infoEntry.str();
-  std::cout << logOutput;
-  filelog(logOutput);
+  //getTime();
+  //std::wostringstream infoEntry;
+  //infoEntry << "[" << timestamp << "] "
+           //<< levelToString(INFO) << ": " << info_message
+           //<< std::endl;
+  //logOutput = infoEntry.str();
+  //std::wcout.precision(32); // Set precision for output
+  //std::wcout << logOutput;
+  //filelog(logOutput);
+  LOG(0) << info_message
 }
 
 void Log::warn(const std::string& warn_message) {
-  getTime();
-  std::ostringstream warnEntry;
-  warnEntry << "[" << timestamp << "] "
-           << levelToString(WARN) << ": " << warn_message
-           << std::endl;
-  logOutput = warnEntry.str();
-  std::cerr << logOutput;
-  filelog(logOutput);
+  //getTime();
+  //std::wostringstream warnEntry;
+  //warnEntry << "[" << timestamp << "] "
+           //<< levelToString(WARN) << ": " << warn_message
+           //<< std::endl;
+  //logOutput = warnEntry.str();
+  //std::wcerr.precision(32);
+  //std::wcerr << logOutput;
+  //filelog(logOutput);
+  LOG(1) << warn_message
 }
 
 void Log::error(const std::string& error_message) {
-  getTime();
-  std::ostringstream errEntry;
-  errEntry << "[" << timestamp << "] "
-           << levelToString(ERROR) << ": " << error_message
-           << std::endl;
-  logOutput = errEntry.str();
-  std::cerr << logOutput;
-  filelog(logOutput);
-  logFile.close();
+  //getTime();
+  //std::wostringstream errEntry;
+  //errEntry << "[" << timestamp << "] "
+           //<< levelToString(ERROR) << ": " << error_message
+           //<< std::endl;
+  //logOutput = errEntry.str();
+  //std::wcerr.precision(32);
+  //std::wcerr << logOutput;
+  //filelog(logOutput);
+  //logFile.close();
+  LOG(2) << error_message
   std::cerr << "FATAL: Terminating with error code: \n";
   NOTREACHABLE();
 }
@@ -101,7 +113,7 @@ const std::string Log::levelToString(LogLevel level) {
   }
 }
 
-#ifdef STANDALONE_LOGGER
+#ifdef STATIC_LOGGER
 int main(void) {
   // Name/Location of the logfile
   const std::string logFile = "logfile.txt";

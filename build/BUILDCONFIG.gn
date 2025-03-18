@@ -1,5 +1,4 @@
-# Basic build configuration
-# like OS, architecture, debug, etc.
+# Basic target OS & architecture configuration
 if (target_os == "") {
   target_os = host_os
 }
@@ -24,40 +23,27 @@ if (current_os == "") {
 }
 
 declare_args() {
-  # Wether to make a debug build.
-  # In debug mode, all assertions are turned on, all compiler
-  # optimization is turned off, and all symbols are included.
-  # This makes a large, slow binary that should never be distributed
-  # to end users. Set to false to make a release build. 
-  is_debug = true
-
-  # Build the standalone logger application?
-  is_standalone_logger = false
+  # Build without the shared liblog library, and instead
+  # link check_simd and logger against a statoic library.
+  # It means only two files instead of three, and slightly
+  # faster, but less modular and extensible.
+  is_static_logger = false
 }
 
-# is_FOO booleans for convenience in writing OS-based
-# conditions.
-is_linux = current_os == "linux"
-is_mac = current_os == "mac"
-is_win = current_os == "win" || current_os == "winuwp"
-is_fuchsia = current_os == "fuchsia"
-is_posix = !is_win && !is_fuchsia
+import("//build/build_args.gni")
 
 # GCC as default, MSVC on Windows
-set_default_toolchain("//build/toolchain:gcc")
+if (is_gcc) {
+  set_default_toolchain("//build/toolchain:gcc")
+}
 
 # The main compiler configuration
 # All binary targets will get this list of configs by default.
 default_compiler_configs = [
+  "//build:debug",
   "//build/config:compiler",
+  "//build:release"
 ]
-
-# Debug/release-related defines.
-if (is_debug) {
-  default_compiler_configs += [ "//build:debug" ]
-} else {
-  default_compiler_configs += [ "//build:release" ]
-}
 
 # GCC/Clang specific workarounds
 if (is_posix) {

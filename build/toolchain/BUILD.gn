@@ -42,7 +42,7 @@ toolchain("gcc") {
 
   tool("cxx") {
     depfile = "{{output}}.d"
-    command = "g++ -MMD -MF $depfile {{defines}} {{include_dirs}} {{cflags}} {{cflags_cc}} -c {{source}} -o {{output}}"
+    command = "g++ -MMD -MF $depfile {{defines}} {{include_dirs}} {{cflags}} {{cflags_cc}} {{cflags_objcc}} -c {{source}} -o {{output}}"
     depsformat = "gcc"
     description = "CXX {{output}}"
     outputs =
@@ -68,7 +68,7 @@ toolchain("gcc") {
       rspfile_content = "{{inputs}} {{solibs}} {{libs}}"
     } else {
       os_specific_option = "-Wl,-soname=$soname"
-      rspfile_content = "-Wl,--whole-archive {{inputs}} {{solibs}} -Wl,--no-whole-archive {{libs}}"
+      rspfile_content = "-Wl,--whole-archive {{ldflags}} {{inputs}} {{solibs}} -Wl,--no-whole-archive {{libs}}"
     }
 
     command = "g++ -shared {{ldflags}} -o $sofile $os_specific_option @$rspfile"

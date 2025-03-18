@@ -1,12 +1,14 @@
 #include "logger.h"
 
-std::string concatStream(const std::string& input) {
+std::wstring concatStream(const std::wstring& input) {
   return input;
 }
 
-void logToConsole() {
-  const std::string test = "test";
-  concatStream(test);
+std::wstring logToConsole() {
+  const std::wstring test = "test";
+  const std::wstring concattedStream =
+      concatStream(test);
+  return concattedStream;
 }
 
 int main(void) {
@@ -21,7 +23,7 @@ int main(void) {
 
       // Example usage of the logger
       Log.info("Standalone Logging Program started.");
-      logToConsole();
+      Log.warn(logToConsole());
 
       return 0;
     } else {
